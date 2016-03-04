@@ -188,11 +188,11 @@ module Cassandra
         else
           cql << ",\n" unless first
         end
-        cql << "  #{column.name} #{type_to_cql(column.type, column.frozen?)}"
+        cql << "  \"#{column.name}\" #{type_to_cql(column.type, column.frozen?)}"
       end
       cql << ",\n  PRIMARY KEY ("
       if @partition_key.one?
-        cql << @partition_key.first.name
+        cql << '"' + @partition_key.first.name + '"'
       else
         cql << '('
         first = true
@@ -202,12 +202,12 @@ module Cassandra
           else
             cql << ', '
           end
-          cql << column.name
+          cql << '"' + column.name + '"'
         end
         cql << ')'
       end
       @clustering_columns.each do |column|
-        cql << ", #{column.name}"
+        cql << ", \"#{column.name}\""
       end
       cql << ')'
 
